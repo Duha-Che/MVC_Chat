@@ -82,6 +82,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbMessageTests.cs" />
+    <Compile Include="DbUserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
@@ -92,6 +94,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{DF511E9F-F41B-4F97-9608-10F233DAC944}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MVC.Chart\MVC.Chart.csproj">
       <Project>{09A41D5E-0157-4011-AA3C-DE94F18AC1CF}</Project>
       <Name>MVC.Chart</Name>

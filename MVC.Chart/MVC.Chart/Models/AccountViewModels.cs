@@ -6,8 +6,8 @@ namespace MVC.Chart.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "Адрес электронной почты")]
-        public string Email { get; set; }
+        [Display(Name = "Ник")]
+        public string Name { get; set; }
     }
 
     public class ExternalLoginListViewModel
@@ -49,9 +49,8 @@ namespace MVC.Chart.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Адрес электронной почты")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Ник")]
+        public string Name { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -65,9 +64,8 @@ namespace MVC.Chart.Models
     public class RegisterViewModel
     {
         [Required]
-        [EmailAddress]
-        [Display(Name = "Адрес электронной почты")]
-        public string Email { get; set; }
+        [Display(Name = "Ник")]
+        public string Name { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
@@ -84,9 +82,8 @@ namespace MVC.Chart.Models
     public class ResetPasswordViewModel
     {
         [Required]
-        [EmailAddress]
-        [Display(Name = "Адрес электронной почты")]
-        public string Email { get; set; }
+        [Display(Name = "Ник")]
+        public string Name { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]

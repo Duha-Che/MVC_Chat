@@ -22,3 +22,15 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.inputPanel input {
+    display:block;
+    width:100%;
+    min-height :28px;
+    box-sizing :border-box;
+}
+
+div{
+    border-color:forestgreen;
+    border-width:2px;
+}
