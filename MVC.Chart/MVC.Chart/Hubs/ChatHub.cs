@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR;
 
@@ -6,6 +7,12 @@ namespace MVC.Chart.SignalR.Hubs
 {
     public class ChatHub : Hub
     {
+
+        //static ChatHub()
+        //{
+        //    Configuration.IConfigurationManager.DisconnectTimeout
+        //}
+
         public void Hello()
         {
             Clients.All.hello();
@@ -13,20 +20,42 @@ namespace MVC.Chart.SignalR.Hubs
 
         static List<User> Users = new List<User>();
 
-        // Отправка сообщений
-        public void Send(string name, string message)
+        public void Broadcast( string message )
         {
-            Clients.All.addMessage(name, message);
+            var identity = Context.User.Identity;
+            if (!identity.IsAuthenticated)
+                return;
+            Clients.All.addMessage(identity.Name, message);
+        }
+
+        public void Send( IEnumerable<string> users, string message)
+        {
+            var identity = Context.User.Identity;
+            if (!identity.IsAuthenticated)
+                return;
+            var userList = users.ToList();
+            if( userList.Any() )
+                Clients.Clients(userList).addMessage(identity.Name, message);
+            //Clients.All.addMessage(identity.Name, message);
         }
 
         // Подключение нового пользователя
-        public void Connect(string userName)
+        public void Connect()
         {
+            var identity = Context.User.Identity;
+            if (!identity.IsAuthenticated)
+                return;
+
             var id = Context.ConnectionId;
 
+            string userName = identity.Name;
 
             if (!Users.Any(x => x.ConnectionId == id))
             {
+                var previousConnections = Users
+                    .Where(u => u.Name.Equals(userName, StringComparison.InvariantCulture))
+                    .Select(u => u.ConnectionId)
+                    ;
                 Users.Add(new User { ConnectionId = id, Name = userName });
 
                 // Посылаем сообщение текущему пользователю
@@ -40,11 +69,17 @@ namespace MVC.Chart.SignalR.Hubs
         // Отключение пользователя
         public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
         {
-            var item = Users.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            var context = Context;
+            var id = Context.ConnectionId;
+            return Disconnect(stopCalled, id);
+        }
+
+        private System.Threading.Tasks.Task Disconnect(bool stopCalled, string id)
+        {
+            var item = Users.FirstOrDefault(x => x.ConnectionId == id);
             if (item != null)
             {
                 Users.Remove(item);
-                var id = Context.ConnectionId;
                 Clients.All.onUserDisconnected(id, item.Name);
             }
 

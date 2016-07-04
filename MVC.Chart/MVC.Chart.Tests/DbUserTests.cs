@@ -15,11 +15,7 @@ namespace DAL.Tests
         [TestMethod]
         public void SerializeToXmlTest()
         {
-            var user = new DbUser()
-            {
-                Name = "From_value<",
-                Password = "Text_value> <hsh"
-            };
+            var user = DbUser.NewUser("From_value<", "Text_value> <hsh");
 
             const string rootTag = "Root";
 
@@ -29,6 +25,7 @@ namespace DAL.Tests
 
             var text = doc.ToString();
 
+            Assert.IsTrue(text.Contains(user.Id.ToString()), "Id");
             Assert.IsTrue(text.Contains("From_value"), "Name");
             Assert.IsTrue(text.Contains("Text_value") && text.Contains("hsh"), "Password");
         }
@@ -54,14 +51,10 @@ namespace DAL.Tests
 
             Assert.IsNotNull(exceptionMsg, "Unexpected serialization 1");
 
-            user = new DbUser()
-            {
-                Name = "From_value<"
-            };
-
             exceptionMsg = null;
             try
             {
+                user = DbUser.NewUser("From_value<", null);
                 DbUser.SerializeToXml(user, doc.Element(rootTag));
             }
             catch (Exception e)
@@ -75,11 +68,7 @@ namespace DAL.Tests
         [TestMethod]
         public void SerializeAndDesrialize()
         {
-            var src = new DbUser()
-            {
-                Name = "From_value<",
-                Password = "Text_value> <hsh"
-            };
+            var src = DbUser.NewUser( "From_value<","Text_value> <hsh");
 
             const string rootTag = "Root";
 
@@ -89,8 +78,10 @@ namespace DAL.Tests
 
             var dst = DbUser.DeserializeFromXml(doc.Element(rootTag).Elements().First());
 
+            Assert.AreEqual(src.Id, dst.Id, "Id");
             Assert.AreEqual(src.Name, dst.Name, "Name");
             Assert.AreEqual(src.Password, dst.Password, "Password");
         }
+
     }
 }

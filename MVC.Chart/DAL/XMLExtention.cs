@@ -14,7 +14,7 @@ namespace DAL
             if (attr == null)
                 throw new ArgumentNullException("attr");
             if (String.IsNullOrEmpty(attr.Value))
-                throw new ArgumentException( "attribute has null or empty value", attr.Name.ToString());
+                throw new ArgumentException("attribute has null or empty value", attr.Name.ToString());
 
             return attr.Value;
         }
@@ -46,6 +46,28 @@ namespace DAL
             if (node == null)
                 throw new ArgumentNullException("node");
             return node.Value;
+        }
+
+        public static Guid AsGuid(this XAttribute attr)
+        {
+            var strVal = attr.AsNonEmptyString();
+
+            Guid result;
+            if( !Guid.TryParse(strVal, out result))
+                throw new ArgumentException("Can't parse attribute value as Guid", attr.Name.ToString());
+
+            return result;
+        }
+
+        public static UInt64 AsUInt64(this XAttribute attr)
+        {
+            var strVal = attr.AsNonEmptyString();
+
+            UInt64 result;
+            if (!UInt64.TryParse(strVal, out result))
+                throw new ArgumentException("Can't parse attribute value as UInt64", attr.Name.ToString());
+
+            return result;
         }
     }
 }

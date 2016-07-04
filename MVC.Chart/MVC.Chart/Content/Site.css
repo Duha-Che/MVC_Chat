@@ -23,14 +23,28 @@ textarea {
     max-width: 280px;
 }
 
-.inputPanel input {
+.input-block-level {
     display:block;
+    max-width:100%;
     width:100%;
     min-height :28px;
     box-sizing :border-box;
+    height:100%;
+  
 }
 
-div{
-    border-color:forestgreen;
-    border-width:2px;
+.div-block-level {
+    height:5em;
+}
+
+.out-message {
+    font-style:italic;
+}
+
+.out-message b{
+    color:blue;
+}
+
+.outputPanel {
+    height:15em;
 }
